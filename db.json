@@ -1,1 +1,42 @@
-{}
+{
+  "todo": [
+    {
+      "name": "React の学習",
+      "status": "expired",
+      "id": 1
+    },
+    {
+      "name": "Vue の学習",
+      "status": "expired",
+      "id": 2
+    },
+    {
+      "name": "Anguler の学習",
+      "status": "expired",
+      "id": 3
+    },
+    {
+      "name": "Laravel の学習",
+      "status": "expired",
+      "id": 4
+    }
+  ],
+  "statuses": [
+    {
+      "id": 1,
+      "name": "pending"
+    },
+    {
+      "id": 2,
+      "name": "done"
+    },
+    {
+      "id": 3,
+      "name": "progress"
+    },
+    {
+      "id": 4,
+      "name": "expired"
+    }
+  ]
+}
