@@ -1,44 +1,36 @@
 import { ChangeEvent, useEffect, useState, VFC } from 'react'
 import './App.css'
-import axios from 'axios'
-
-const STATUS = {
-  PENDING: 'pending',
-  DONE: 'done',
-  PROGRESS: 'progress',
-  EXPIRED: 'expired',
-} as const
-
-type Status = typeof STATUS[keyof typeof STATUS]
-
-type TodoStatus = {
-  id: number
-  name: Status
-}
-
-type Todo = {
-  id: number
-  name: string
-  status: Status
-}
+import { STATUS, Status } from 'const/status'
+import { Task } from 'types/task'
+import { TaskStatus } from 'types/taskStatus'
+import { api, isErrorResponse } from 'utils/api'
 
 const App: VFC = () => {
-  const [todo, setTodo] = useState<Todo[]>([])
-  const [statuses, setStatuses] = useState<TodoStatus[]>([])
+  const [todo, setTodo] = useState<Task[]>([])
+  const [statuses, setStatuses] = useState<TaskStatus[]>([])
   const [updateStatus, setUpdateStatus] = useState<Status>(STATUS.PENDING)
   const [newTask, setNewTask] = useState('')
 
   const getTodo = async () => {
-    const response = await axios.get<Todo[]>('http://localhost:3001/todo')
+    const response = await api.todo.getTodo()
 
-    setTodo(() => response.data)
+    if (isErrorResponse(response)) {
+      // どっか飛ばしたいね
+      return
+    }
+
+    setTodo(() => response)
   }
 
   const getStatuses = async () => {
-    const response = await axios.get<TodoStatus[]>(
-      'http://localhost:3001/statuses',
-    )
-    setStatuses(() => response.data)
+    const response = await api.statuses.getStatuses()
+
+    if (isErrorResponse(response)) {
+      // どっか飛ばしたいね
+      return
+    }
+
+    setStatuses(() => response)
   }
 
   useEffect(() => {
@@ -50,30 +42,30 @@ const App: VFC = () => {
     setNewTask(() => e.target.value)
   }
 
-  const addTask = async () => {
-    const response = await axios.post<Todo>('http://localhost:3001/todo', {
-      name: newTask,
-      status: STATUS.PENDING,
-    })
-
-    setTodo((prev) => [...prev, response.data])
-  }
-
-  const changeStatus = async (task: Todo) => {
-    await axios.put<Todo>(`http://localhost:3001/todo/${task.id}`, {
-      name: task.name,
-      status: updateStatus,
-    })
-
-    getTodo()
-  }
-
   const handleChangeStatus = (e: ChangeEvent<HTMLSelectElement>) => {
     setUpdateStatus(() => e.target.value as Status)
   }
 
+  const addTask = async () => {
+    const response = await api.todo.postTodo(newTask)
+
+    if (isErrorResponse(response)) {
+      // どっか飛ばしたいね
+      return
+    }
+
+    setTodo((prev) => [...prev, response])
+    setNewTask(() => '')
+  }
+
+  const changeStatus = async (id: number, name: string) => {
+    await api.todo.putTodo(id, name, updateStatus)
+
+    getTodo()
+  }
+
   const deleteTask = async (id: number) => {
-    await axios.delete<Todo>(`http://localhost:3001/todo/${id}`)
+    await api.todo.deleteTodo(id)
 
     getTodo()
   }
@@ -100,7 +92,9 @@ const App: VFC = () => {
           {todo.map((task) => (
             <li key={task.id}>
               {task.id}: {task.name}: {task.status}:
-              <button onClick={() => changeStatus(task)}>更新</button>
+              <button onClick={() => changeStatus(task.id, task.name)}>
+                更新
+              </button>
               <button onClick={() => deleteTask(task.id)}>削除</button>
             </li>
           ))}

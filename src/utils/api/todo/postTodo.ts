@@ -5,9 +5,7 @@ import { request } from 'utils/request'
 
 export const postTodo = async (name: string): Promise<ApiResponse<Task>> => {
   return await request.post<Task>('/todo', {
-    data: {
-      name,
-      status: STATUS.PENDING,
-    },
+    name,
+    status: STATUS.PENDING,
   })
 }

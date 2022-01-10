@@ -9,9 +9,7 @@ export const putTodo = async (
   status: Status,
 ): Promise<ApiResponse<Task>> => {
   return await request.put<Task>(`/todo/${id}`, {
-    data: {
-      name,
-      status,
-    },
+    name,
+    status,
   })
 }
