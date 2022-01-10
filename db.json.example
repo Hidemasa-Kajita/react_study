@@ -12,12 +12,12 @@
     },
     {
       "name": "Anguler の学習",
-      "status": "expired",
+      "status": "pending",
       "id": 3
     },
     {
       "name": "Laravel の学習",
-      "status": "expired",
+      "status": "done",
       "id": 4
     }
   ],
@@ -28,11 +28,11 @@
     },
     {
       "id": 2,
-      "name": "done"
+      "name": "progress"
     },
     {
       "id": 3,
-      "name": "progress"
+      "name": "done"
     },
     {
       "id": 4,
