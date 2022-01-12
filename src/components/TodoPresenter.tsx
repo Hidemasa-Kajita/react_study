@@ -4,7 +4,9 @@ import { Task } from 'types/task'
 import { TaskStatus } from 'types/taskStatus'
 import NewTaskForm from './NewTaskForm'
 import SelectBox from './SelectBox'
+import SubTitle from './SubTitle'
 import TaskList from './TaskList'
+import Title from './Title'
 
 type Props = {
   todo: Task[]
@@ -31,7 +33,7 @@ const TodoPresenter: VFC<Props> = ({
 
   return (
     <div>
-      <h1>todo app</h1>
+      <Title />
       <div>
         <NewTaskForm
           newTask={newTask}
@@ -40,7 +42,7 @@ const TodoPresenter: VFC<Props> = ({
         />
       </div>
       <div>
-        <h2>タスクリスト</h2>
+        <SubTitle title="タスクリスト" />
         変更ステータス:
         <SelectBox<Status>
           statuses={statuses}

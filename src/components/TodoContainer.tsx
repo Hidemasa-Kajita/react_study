@@ -6,6 +6,7 @@ import { api, isErrorResponse } from 'utils/api'
 import TodoPresenter from './TodoPresenter'
 
 const TodoContainer: VFC = () => {
+  console.log('------------')
   console.log('--- TodoContainer ---')
 
   const [todo, setTodo] = useState<Task[]>([])
