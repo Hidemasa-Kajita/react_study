@@ -10,7 +10,7 @@ export const useTask = () => {
   const [updateStatus, setUpdateStatus] = useState<Status>(STATUS.PENDING)
   const [newTask, setNewTask] = useState('')
 
-  const getTodo = async () => {
+  const getTodo = async (): Promise<void> => {
     const response = await api.todo.getTodo()
 
     if (isErrorResponse(response)) {
@@ -21,7 +21,7 @@ export const useTask = () => {
     setTodo(() => response)
   }
 
-  const getStatuses = async () => {
+  const getStatuses = async (): Promise<void> => {
     const response = await api.statuses.getStatuses()
 
     if (isErrorResponse(response)) {
@@ -37,15 +37,15 @@ export const useTask = () => {
     getTodo()
   }, [])
 
-  const handleChangeNewTask = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeNewTask = (e: ChangeEvent<HTMLInputElement>): void => {
     setNewTask(() => e.target.value)
   }
 
-  const handleChangeStatus = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeStatus = (e: ChangeEvent<HTMLSelectElement>): void => {
     setUpdateStatus(() => e.target.value as Status)
   }
 
-  const addTask = async () => {
+  const addTask = async (): Promise<void> => {
     const response = await api.todo.postTodo(newTask)
 
     if (isErrorResponse(response)) {
@@ -57,13 +57,13 @@ export const useTask = () => {
     setNewTask(() => '')
   }
 
-  const changeStatus = async (id: number, name: string) => {
+  const changeStatus = async (id: number, name: string): Promise<void> => {
     await api.todo.putTodo(id, name, updateStatus)
 
     getTodo()
   }
 
-  const deleteTask = async (id: number) => {
+  const deleteTask = async (id: number): Promise<void> => {
     await api.todo.deleteTodo(id)
 
     getTodo()
