@@ -1,5 +1,3 @@
-// useCallback とかの使い方
-
 import { useTask } from 'hooks/useTask'
 import { VFC } from 'react'
 import TodoPresenter from './TodoPresenter'
