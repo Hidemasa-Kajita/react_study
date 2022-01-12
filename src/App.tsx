@@ -4,8 +4,13 @@ import { STATUS, Status } from 'const/status'
 import { Task } from 'types/task'
 import { TaskStatus } from 'types/taskStatus'
 import { api, isErrorResponse } from 'utils/api'
+import NewTaskForm from 'components/NewTaskForm'
+import TaskList from 'components/TaskList'
+import SelectBox from 'components/SelectBox'
 
 const App: VFC = () => {
+  console.log('--- App ---')
+
   const [todo, setTodo] = useState<Task[]>([])
   const [statuses, setStatuses] = useState<TaskStatus[]>([])
   const [updateStatus, setUpdateStatus] = useState<Status>(STATUS.PENDING)
@@ -74,31 +79,24 @@ const App: VFC = () => {
     <div>
       <h1>todo app</h1>
       <div>
-        <h2>新規タスク追加</h2>
-        <input value={newTask} onChange={handleChangeNewTask} />
-        <button onClick={addTask}>追加</button>
+        <NewTaskForm
+          newTask={newTask}
+          handleChangeNewTask={handleChangeNewTask}
+          addTask={addTask}
+        />
       </div>
       <div>
         <h2>タスクリスト</h2>
         変更ステータス:
-        <select onChange={handleChangeStatus}>
-          {statuses.map((status) => (
-            <option key={status.id} value={status.name}>
-              {status.name}
-            </option>
-          ))}
-        </select>
-        <ul>
-          {todo.map((task) => (
-            <li key={task.id}>
-              {task.id}: {task.name}: {task.status}:
-              <button onClick={() => changeStatus(task.id, task.name)}>
-                更新
-              </button>
-              <button onClick={() => deleteTask(task.id)}>削除</button>
-            </li>
-          ))}
-        </ul>
+        <SelectBox<Status>
+          statuses={statuses}
+          handleChangeStatus={handleChangeStatus}
+        />
+        <TaskList
+          todo={todo}
+          changeStatus={changeStatus}
+          deleteTask={deleteTask}
+        />
       </div>
     </div>
   )
