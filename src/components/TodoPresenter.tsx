@@ -26,30 +26,34 @@ const TodoPresenter: VFC<Props> = ({
   changeStatus,
   addTask,
   deleteTask,
-}) => (
-  <div>
-    <h1>todo app</h1>
+}) => {
+  console.log('--- TodoPresenter ---')
+
+  return (
     <div>
-      <NewTaskForm
-        newTask={newTask}
-        handleChangeNewTask={handleChangeNewTask}
-        addTask={addTask}
-      />
+      <h1>todo app</h1>
+      <div>
+        <NewTaskForm
+          newTask={newTask}
+          handleChangeNewTask={handleChangeNewTask}
+          addTask={addTask}
+        />
+      </div>
+      <div>
+        <h2>タスクリスト</h2>
+        変更ステータス:
+        <SelectBox<Status>
+          statuses={statuses}
+          handleChangeStatus={handleChangeStatus}
+        />
+        <TaskList
+          todo={todo}
+          changeStatus={changeStatus}
+          deleteTask={deleteTask}
+        />
+      </div>
     </div>
-    <div>
-      <h2>タスクリスト</h2>
-      変更ステータス:
-      <SelectBox<Status>
-        statuses={statuses}
-        handleChangeStatus={handleChangeStatus}
-      />
-      <TaskList
-        todo={todo}
-        changeStatus={changeStatus}
-        deleteTask={deleteTask}
-      />
-    </div>
-  </div>
-)
+  )
+}
 
 export default TodoPresenter
