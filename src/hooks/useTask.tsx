@@ -1,6 +1,6 @@
 // ASK: useCallback, useMemo の使い方
 
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { STATUS, Status } from 'const/status'
 import { Task } from 'types/task'
 import { TaskStatus } from 'types/taskStatus'
@@ -11,6 +11,7 @@ export const useTask = () => {
   const [statuses, setStatuses] = useState<TaskStatus[]>([])
   const [updateStatus, setUpdateStatus] = useState<Status>(STATUS.PENDING)
   const [newTask, setNewTask] = useState('')
+  const [count, setCount] = useState(0)
 
   const getTodo = async (): Promise<void> => {
     const response = await api.todo.getTodo()
@@ -39,15 +40,23 @@ export const useTask = () => {
     getTodo()
   }, [])
 
-  const handleChangeNewTask = (e: ChangeEvent<HTMLInputElement>): void => {
-    setNewTask(() => e.target.value)
-  }
+  const handleSetCount = useCallback(() => setCount((pre) => pre + 1), [])
 
-  const handleChangeStatus = (e: ChangeEvent<HTMLSelectElement>): void => {
-    setUpdateStatus(() => e.target.value as Status)
-  }
+  const handleChangeNewTask = useCallback(
+    (e: ChangeEvent<HTMLInputElement>): void => {
+      setNewTask(() => e.target.value)
+    },
+    [],
+  )
 
-  const addTask = async (): Promise<void> => {
+  const handleChangeStatus = useCallback(
+    (e: ChangeEvent<HTMLSelectElement>): void => {
+      setUpdateStatus(() => e.target.value as Status)
+    },
+    [],
+  )
+
+  const addTask = useCallback(async (): Promise<void> => {
     const response = await api.todo.postTodo(newTask)
 
     if (isErrorResponse(response)) {
@@ -57,28 +66,32 @@ export const useTask = () => {
 
     setTodo((prev) => [...prev, response])
     setNewTask(() => '')
-  }
+  }, [newTask])
 
-  const changeStatus = async (id: number, name: string): Promise<void> => {
-    await api.todo.putTodo(id, name, updateStatus)
+  const changeStatus = useCallback(
+    async (id: number, name: string): Promise<void> => {
+      await api.todo.putTodo(id, name, updateStatus)
 
-    getTodo()
-  }
+      getTodo()
+    },
+    [updateStatus],
+  )
 
-  const deleteTask = async (id: number): Promise<void> => {
+  const deleteTask = useCallback(async (id: number): Promise<void> => {
     await api.todo.deleteTodo(id)
 
     getTodo()
-  }
+  }, [])
 
   return [
-    { todo, newTask, statuses },
+    { todo, newTask, statuses, count },
     {
       handleChangeNewTask,
       handleChangeStatus,
       addTask,
       changeStatus,
       deleteTask,
+      handleSetCount,
     },
   ] as const
 }

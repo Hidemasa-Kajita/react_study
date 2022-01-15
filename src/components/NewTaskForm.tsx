@@ -1,4 +1,4 @@
-import { ChangeEvent, VFC } from 'react'
+import { ChangeEvent, memo, VFC } from 'react'
 
 type Props = {
   newTask: string
@@ -6,16 +6,18 @@ type Props = {
   addTask: () => void
 }
 
-const NewTaskForm: VFC<Props> = ({ newTask, handleChangeNewTask, addTask }) => {
-  console.log('--- newTaskForm ---')
+const NewTaskForm: VFC<Props> = memo(
+  ({ newTask, handleChangeNewTask, addTask }) => {
+    console.log('--- newTaskForm ---')
 
-  return (
-    <>
-      <h2>新規タスク追加</h2>
-      <input value={newTask} onChange={handleChangeNewTask} />
-      <button onClick={addTask}>追加</button>
-    </>
-  )
-}
+    return (
+      <>
+        <h2>新規タスク追加</h2>
+        <input value={newTask} onChange={handleChangeNewTask} />
+        <button onClick={addTask}>追加</button>
+      </>
+    )
+  },
+)
 
 export default NewTaskForm

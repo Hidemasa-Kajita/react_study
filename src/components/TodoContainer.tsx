@@ -1,19 +1,20 @@
 import { useTask } from 'hooks/useTask'
-import { VFC } from 'react'
+import { memo, VFC } from 'react'
 import TodoPresenter from './TodoPresenter'
 
-const TodoContainer: VFC = () => {
+const TodoContainer: VFC = memo(() => {
   console.log('------------')
   console.log('--- TodoContainer ---')
 
   const [
-    { todo, newTask, statuses },
+    { todo, newTask, statuses, count },
     {
       handleChangeNewTask,
       handleChangeStatus,
       addTask,
       changeStatus,
       deleteTask,
+      handleSetCount,
     },
   ] = useTask()
 
@@ -22,13 +23,15 @@ const TodoContainer: VFC = () => {
       todo={todo}
       newTask={newTask}
       statuses={statuses}
+      count={count}
       handleChangeNewTask={handleChangeNewTask}
       handleChangeStatus={handleChangeStatus}
+      handleSetCount={handleSetCount}
       changeStatus={changeStatus}
       addTask={addTask}
       deleteTask={deleteTask}
     />
   )
-}
+})
 
 export default TodoContainer

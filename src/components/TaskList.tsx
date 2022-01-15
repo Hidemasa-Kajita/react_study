@@ -1,4 +1,4 @@
-import { VFC } from 'react'
+import { memo, VFC } from 'react'
 import { Task } from 'types/task'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   deleteTask: (id: number) => void
 }
 
-const TaskList: VFC<Props> = ({ todo, changeStatus, deleteTask }) => {
+const TaskList: VFC<Props> = memo(({ todo, changeStatus, deleteTask }) => {
   console.log('--- TaskList ---')
 
   return (
@@ -25,6 +25,6 @@ const TaskList: VFC<Props> = ({ todo, changeStatus, deleteTask }) => {
       </ul>
     </>
   )
-}
+})
 
 export default TaskList

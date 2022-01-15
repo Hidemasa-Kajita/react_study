@@ -1,6 +1,6 @@
 // ASK: 汎用コンポーネントの型定義どうすれば良いの？
 
-import { ChangeEvent } from 'react'
+import { ChangeEvent, memo, VFC } from 'react'
 
 type ListItem<T> = {
   id: number
@@ -8,20 +8,20 @@ type ListItem<T> = {
 }
 
 type Props<T> = {
-  statuses: ListItem<T>[]
+  listItems: ListItem<T>[]
   handleChangeStatus: (e: ChangeEvent<HTMLSelectElement>) => void
 }
 
-const DropDown = <T,>({ statuses, handleChangeStatus }: Props<T>) => {
+const DropDown = <T,>({ listItems, handleChangeStatus }: Props<T>) => {
   console.log('--- DropDown ---')
 
   return (
     <>
       変更ステータス:
       <select onChange={handleChangeStatus}>
-        {statuses.map((status) => (
-          <option key={status.id} value={status.name}>
-            {status.name}
+        {listItems.map((listItem) => (
+          <option key={listItem.id} value={listItem.name}>
+            {listItem.name}
           </option>
         ))}
       </select>
