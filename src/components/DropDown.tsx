@@ -12,8 +12,8 @@ type Props<T> = {
   handleChangeStatus: (e: ChangeEvent<HTMLSelectElement>) => void
 }
 
-const SelectBox = <T,>({ statuses, handleChangeStatus }: Props<T>) => {
-  console.log('--- SelectBox ---')
+const DropDown = <T,>({ statuses, handleChangeStatus }: Props<T>) => {
+  console.log('--- DropDown ---')
 
   return (
     <>
@@ -29,4 +29,4 @@ const SelectBox = <T,>({ statuses, handleChangeStatus }: Props<T>) => {
   )
 }
 
-export default SelectBox
+export default DropDown
