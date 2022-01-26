@@ -200,8 +200,6 @@ const Tasks: VFC = () => {
         }-${end.getDate()}`
       }
 
-      console.log(task)
-
       return task
     })
   }
