@@ -19,20 +19,21 @@ type Task interface {
 }
 
 type task struct {
-	taskService service.Task
+	taskService  service.Task
+	taskResponse response.Task
 }
 
 func NewTask() Task {
 	return &task{
-		taskService: service.NewTask(),
+		taskService:  service.NewTask(),
+		taskResponse: response.NewTask(),
 	}
 }
 
 func (tc *task) Index(c *gin.Context) {
 	tasks := tc.taskService.GetTasks()
 
-	var tr response.Task
-	r := tr.FormatArray(tasks)
+	r := tc.taskResponse.FormatArray(tasks)
 
 	c.JSON(http.StatusOK, r)
 }
@@ -47,8 +48,7 @@ func (tc *task) Show(c *gin.Context) {
 		return
 	}
 
-	var tr response.Task
-	r := tr.Format(task)
+	r := tc.taskResponse.Format(task)
 
 	c.JSON(http.StatusOK, r)
 }

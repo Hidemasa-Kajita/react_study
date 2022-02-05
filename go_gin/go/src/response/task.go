@@ -2,7 +2,7 @@ package response
 
 import "github.com/Hidemasa-Kajita/go_api_sample/entity"
 
-type Task struct {
+type task struct {
 	ID                    uint64  `json:"id"`
 	Name                  string  `json:"name"`
 	StartDate             *string `json:"start_date"`
@@ -15,25 +15,34 @@ type Task struct {
 	UpdatedAt             string  `json:"updated_at"`
 }
 
-func (_ Task) Format(task entity.Task) Task {
-	return Task{
-		ID:                    task.ID,
-		Name:                  task.Name,
-		StartDate:             task.StartDate,
-		EndDate:               task.EndDate,
-		ImplementationHours:   task.ImplementationHours,
-		ImplementationMinutes: task.ImplementationMinutes,
-		Status:                task.Status,
-		Memo:                  task.Memo,
-		CreatedAt:             task.CreatedAt.Format("2006/01/02 15:04:05"),
-		UpdatedAt:             task.UpdatedAt.Format("2006/01/02 15:04:05"),
+type Task interface {
+	Format(et entity.Task) task
+	FormatArray(tasks []entity.Task) []task
+}
+
+func NewTask() Task {
+	return &task{}
+}
+
+func (_ task) Format(et entity.Task) task {
+	return task{
+		ID:                    et.ID,
+		Name:                  et.Name,
+		StartDate:             et.StartDate,
+		EndDate:               et.EndDate,
+		ImplementationHours:   et.ImplementationHours,
+		ImplementationMinutes: et.ImplementationMinutes,
+		Status:                et.Status,
+		Memo:                  et.Memo,
+		CreatedAt:             et.CreatedAt.Format("2006/01/02 15:04:05"),
+		UpdatedAt:             et.UpdatedAt.Format("2006/01/02 15:04:05"),
 	}
 }
 
-func (t Task) FormatArray(tasks []entity.Task) []Task {
-	r := make([]Task, len(tasks), cap(tasks))
+func (t task) FormatArray(tasks []entity.Task) []task {
+	r := make([]task, len(tasks), cap(tasks))
 	for i, v := range tasks {
-		r[i] = Task.Format(t, v)
+		r[i] = task.Format(t, v)
 	}
 
 	return r
