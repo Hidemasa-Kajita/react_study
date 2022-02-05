@@ -1,0 +1,77 @@
+version: '3'
+services:
+  # Api server
+  app:
+    container_name: app
+    build: ./go
+    tty: true
+    ports:
+      - 8080:8080
+    environment:
+      - GOPATH= # 使用しないのでクリア
+    volumes:
+      - ./go/src:/go/src
+
+  # DB server
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    ports:
+      - 13306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: go
+      MYSQL_USER: go
+      MYSQL_PASSWORD: go
+      TZ: Asia/Tokyo
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/logs:/var/log/mysql
+    restart: always
+  
+  # DB client
+  adminer:
+    container_name: adminer
+    hostname: adminer
+    image: adminer:latest
+    restart: always
+    environment:
+      - ADMINER_DESIGN=price
+    ports:
+      - 8001:8080
+    links:
+      - mysql
+
+  # web server for schemaspy
+  nginx_schemaspy:
+    image: nginx
+    container_name: nginx_schemaspy
+    ports:
+      - 8002:80
+    volumes:
+      - ./tools/schemaspy/output:/usr/share/nginx/html:ro
+
+  # DB schema
+  schemaspy:
+    container_name: schemaspy
+    image: schemaspy/schemaspy:snapshot
+    volumes:
+      - ./tools/schemaspy/output:/output
+      - ./tools/schemaspy/config:/config
+      - ./tools/schemaspy/driver:/drivers
+    command: ['-configFile', '/config/schemaspy.properties']
+    depends_on:
+      - mysql
+    links:
+      - mysql
+
+  # mail hog
+  mail:
+    container_name: mail
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+  
