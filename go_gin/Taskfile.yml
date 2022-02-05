@@ -1,0 +1,18 @@
+version: '3'
+
+tasks:
+  build:
+    cmds:
+      - docker compose build --no-cache
+  up:
+    cmds:
+      - docker compose up
+  stop:
+    cmds:
+      - docker compose stop
+  down:
+    cmds:
+      - docker compose down
+  ps:
+    cmds:
+      - docker compose ps

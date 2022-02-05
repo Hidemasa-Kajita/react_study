@@ -1,0 +1,10 @@
+go/src/pkg
+
+mysql/data
+
+tools/schemaspy/output
+
+*.log
+logs
+
+tmp
