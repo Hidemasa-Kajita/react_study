@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/Hidemasa-Kajita/go_api_sample/entity"
+	"github.com/Hidemasa-Kajita/go_api_sample/infrastructure"
 	"github.com/Hidemasa-Kajita/go_api_sample/repository"
 	"github.com/Hidemasa-Kajita/go_api_sample/request"
 )
@@ -41,8 +42,8 @@ func (s *task) GetTasks() []entity.Task {
 func (s *task) CreateTask(inputTask request.Task) entity.Task {
 	task := entity.Task{
 		Name:                  inputTask.Name,
-		StartDate:             inputTask.StartDate,
-		EndDate:               inputTask.EndDate,
+		StartDate:             infrastructure.StringToDateWhenIncludeNil(inputTask.StartDate, "2006-01-02"),
+		EndDate:               infrastructure.StringToDateWhenIncludeNil(inputTask.EndDate, "2006-01-02"),
 		ImplementationHours:   inputTask.ImplementationHours,
 		ImplementationMinutes: inputTask.ImplementationMinutes,
 		Status:                inputTask.Status,
@@ -62,8 +63,8 @@ func (s *task) UpdateTask(inputTask request.Task, id string) entity.Task {
 	}
 
 	task.Name = inputTask.Name
-	task.StartDate = inputTask.StartDate
-	task.EndDate = inputTask.EndDate
+	task.StartDate = infrastructure.StringToDateWhenIncludeNil(inputTask.StartDate, "2006-01-02")
+	task.EndDate = infrastructure.StringToDateWhenIncludeNil(inputTask.EndDate, "2006-01-02")
 	task.ImplementationHours = inputTask.ImplementationHours
 	task.ImplementationMinutes = inputTask.ImplementationMinutes
 	task.Status = inputTask.Status

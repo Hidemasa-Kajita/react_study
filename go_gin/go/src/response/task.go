@@ -1,6 +1,9 @@
 package response
 
-import "github.com/Hidemasa-Kajita/go_api_sample/entity"
+import (
+	"github.com/Hidemasa-Kajita/go_api_sample/entity"
+	"github.com/Hidemasa-Kajita/go_api_sample/infrastructure"
+)
 
 type task struct {
 	ID                    uint64  `json:"id"`
@@ -28,14 +31,14 @@ func (_ task) Format(et entity.Task) task {
 	return task{
 		ID:                    et.ID,
 		Name:                  et.Name,
-		StartDate:             et.StartDate,
-		EndDate:               et.EndDate,
+		StartDate:             infrastructure.DateToStringWhenIncludeNil(et.StartDate, "2006-01-02"),
+		EndDate:               infrastructure.DateToStringWhenIncludeNil(et.EndDate, "2006-01-02"),
 		ImplementationHours:   et.ImplementationHours,
 		ImplementationMinutes: et.ImplementationMinutes,
 		Status:                et.Status,
 		Memo:                  et.Memo,
-		CreatedAt:             et.CreatedAt.Format("2006/01/02 15:04:05"),
-		UpdatedAt:             et.UpdatedAt.Format("2006/01/02 15:04:05"),
+		CreatedAt:             infrastructure.DateToString(et.CreatedAt, "2006-01-02 15:04:05"),
+		UpdatedAt:             infrastructure.DateToString(et.UpdatedAt, "2006-01-02 15:04:05"),
 	}
 }
 

@@ -65,7 +65,9 @@ func (tc *task) Store(c *gin.Context) {
 
 	newTask := tc.taskService.CreateTask(task)
 
-	c.JSON(http.StatusOK, newTask)
+	r := tc.taskResponse.Format(newTask)
+
+	c.JSON(http.StatusOK, r)
 }
 
 func (tc *task) Update(c *gin.Context) {
@@ -88,7 +90,9 @@ func (tc *task) Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, task)
+	r := tc.taskResponse.Format(task)
+
+	c.JSON(http.StatusOK, r)
 }
 
 func (tc *task) Delete(c *gin.Context) {
