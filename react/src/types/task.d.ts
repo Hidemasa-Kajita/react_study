@@ -7,7 +7,7 @@ export type Task = {
   implementation_minutes: number | null
   status: string
   memo: string | null
-  labels: Label[]
+  // labels: Label[]
   created_at: string
   updated_at: string
 }

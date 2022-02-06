@@ -17,36 +17,38 @@ type Task interface {
 	Delete(t *entity.Task, id string)
 }
 
-type conn struct {
+type taskConn struct {
 	connection *gorm.DB
 }
 
 func NewTask() Task {
-	return &conn{
+	return &taskConn{
 		connection: infrastructure.ConnDB(),
 	}
 }
 
-func (db *conn) Save() {
+func (db *taskConn) Save() {
 	fmt.Printf("Save!")
 }
 
-func (db *conn) GetAll(ts *[]entity.Task) {
-	db.connection.Find(&ts)
+func (db *taskConn) GetAll(ts *[]entity.Task) {
+	db.connection.Preload("Status").Find(&ts)
 }
 
-func (db *conn) GetOne(t *entity.Task, id string) {
-	db.connection.Find(&t, id)
+func (db *taskConn) GetOne(t *entity.Task, id string) {
+	db.connection.Preload("Status").Find(&t, id)
 }
 
-func (db *conn) Create(t *entity.Task) {
+func (db *taskConn) Create(t *entity.Task) {
 	db.connection.Create(&t)
+	db.connection.Preload("Status").Find(&t, t.ID)
 }
 
-func (db *conn) Update(t *entity.Task) {
+func (db *taskConn) Update(t *entity.Task) {
 	db.connection.Save(&t)
+	db.connection.Preload("Status").Find(&t, t.ID)
 }
 
-func (db *conn) Delete(t *entity.Task, id string) {
+func (db *taskConn) Delete(t *entity.Task, id string) {
 	db.connection.Delete(&t, id)
 }

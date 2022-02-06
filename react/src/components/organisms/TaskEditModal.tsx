@@ -1,5 +1,5 @@
 import { ChangeEvent, Fragment, VFC } from 'react'
-import { Task } from 'types/task'
+import { Task } from '../../types/task'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import TextareaAutosize from '@mui/material/TextareaAutosize'
@@ -14,9 +14,9 @@ import DateRangePicker from '@mui/lab/DateRangePicker'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import { DateRange } from '@mui/lab/DateRangePicker/RangeTypes'
-import TextInputField from 'components/molecules/TextInputField'
+import TextInputField from '../../components/molecules/TextInputField'
 import Button from '@mui/material/Button'
-import NumberInputField from 'components/molecules/NumberInputField'
+import NumberInputField from '../../components/molecules/NumberInputField'
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;

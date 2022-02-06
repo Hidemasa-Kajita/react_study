@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Hidemasa-Kajita/go_api_sample/entity"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
@@ -29,7 +30,7 @@ func OpenDB() {
 	if err != nil {
 		panic(err)
 	}
-	// db.AutoMigrate(&entity.Task{})
+	db.AutoMigrate(&entity.Task{}, &entity.Status{})
 	connDB = db
 }
 

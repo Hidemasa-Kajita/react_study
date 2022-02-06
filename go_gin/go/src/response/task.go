@@ -21,6 +21,7 @@ type task struct {
 type Task interface {
 	Format(et entity.Task) task
 	FormatArray(tasks []entity.Task) []task
+	FormatByStatus(status []entity.Status) map[string][]task
 }
 
 func NewTask() Task {
@@ -35,7 +36,7 @@ func (_ task) Format(et entity.Task) task {
 		EndDate:               infrastructure.DateToStringWhenIncludeNil(et.EndDate, "2006-01-02"),
 		ImplementationHours:   et.ImplementationHours,
 		ImplementationMinutes: et.ImplementationMinutes,
-		Status:                et.Status,
+		Status:                et.Status.Name,
 		Memo:                  et.Memo,
 		CreatedAt:             infrastructure.DateToString(et.CreatedAt, "2006-01-02 15:04:05"),
 		UpdatedAt:             infrastructure.DateToString(et.UpdatedAt, "2006-01-02 15:04:05"),
@@ -45,7 +46,17 @@ func (_ task) Format(et entity.Task) task {
 func (t task) FormatArray(tasks []entity.Task) []task {
 	r := make([]task, len(tasks), cap(tasks))
 	for i, v := range tasks {
-		r[i] = task.Format(t, v)
+		r[i] = t.Format(v)
+	}
+
+	return r
+}
+
+func (t task) FormatByStatus(s []entity.Status) map[string][]task {
+	r := make(map[string][]task, len(s))
+
+	for _, v := range s {
+		r[v.Name] = t.FormatArray(v.Tasks)
 	}
 
 	return r

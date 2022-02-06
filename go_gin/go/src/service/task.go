@@ -13,15 +13,18 @@ type Task interface {
 	CreateTask(inputTask request.Task) entity.Task
 	UpdateTask(inputTask request.Task, id string) entity.Task
 	DeleteTask(id string)
+	GetTasksByStatus() []entity.Status
 }
 
 type task struct {
-	taskRepository repository.Task
+	taskRepository   repository.Task
+	statusRepository repository.Status
 }
 
 func NewTask() Task {
 	return &task{
-		taskRepository: repository.NewTask(),
+		taskRepository:   repository.NewTask(),
+		statusRepository: repository.NewStatus(),
 	}
 }
 
@@ -39,14 +42,22 @@ func (s *task) GetTasks() []entity.Task {
 	return tasks
 }
 
+func (s *task) GetTasksByStatus() []entity.Status {
+	var status []entity.Status
+	s.statusRepository.GetAllWithTasks(&status)
+
+	return status
+}
+
 func (s *task) CreateTask(inputTask request.Task) entity.Task {
+
 	task := entity.Task{
 		Name:                  inputTask.Name,
 		StartDate:             infrastructure.StringToDateWhenIncludeNil(inputTask.StartDate, "2006-01-02"),
 		EndDate:               infrastructure.StringToDateWhenIncludeNil(inputTask.EndDate, "2006-01-02"),
 		ImplementationHours:   inputTask.ImplementationHours,
 		ImplementationMinutes: inputTask.ImplementationMinutes,
-		Status:                inputTask.Status,
+		StatusID:              inputTask.Status.ID,
 		Memo:                  inputTask.Memo,
 	}
 	s.taskRepository.Create(&task)
@@ -56,7 +67,9 @@ func (s *task) CreateTask(inputTask request.Task) entity.Task {
 
 func (s *task) UpdateTask(inputTask request.Task, id string) entity.Task {
 	var task entity.Task
+	var status entity.Status
 	s.taskRepository.GetOne(&task, id)
+	s.statusRepository.GetOne(&status, id)
 
 	if task.ID == 0 {
 		return task
@@ -67,7 +80,7 @@ func (s *task) UpdateTask(inputTask request.Task, id string) entity.Task {
 	task.EndDate = infrastructure.StringToDateWhenIncludeNil(inputTask.EndDate, "2006-01-02")
 	task.ImplementationHours = inputTask.ImplementationHours
 	task.ImplementationMinutes = inputTask.ImplementationMinutes
-	task.Status = inputTask.Status
+	task.StatusID = inputTask.Status.ID
 	task.Memo = inputTask.Memo
 
 	s.taskRepository.Update(&task)

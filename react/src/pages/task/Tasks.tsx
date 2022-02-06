@@ -1,14 +1,19 @@
-import { useState, ChangeEvent, VFC } from 'react'
-import TopBar from 'components/molecules/TopBar'
-import TaskList from 'components/organisms/TaskList'
+import { useState, ChangeEvent, VFC, memo } from 'react'
+import TopBar from '../../components/molecules/TopBar'
+import TaskList from '../../components/organisms/TaskList'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { SelectChangeEvent } from '@mui/material/Select'
 import { DateRange } from '@mui/lab/DateRangePicker'
-import { Task } from 'types/task'
-import TaskEditModal from 'components/organisms/TaskEditModal'
+import { Task } from '../../types/task'
+import TaskEditModal from '../../components/organisms/TaskEditModal'
+import useSWR from 'swr'
 
-const Tasks: VFC = () => {
+const Tasks: VFC = memo(() => {
+  const fetcher = (url: string) => fetch(url).then(res => res.json())
+  const { data } = useSWR('http://localhost:8080/api/tasks/', fetcher)
+  console.log(data)
+
   // mock
   const [tasksByStatus, setTasksByStatus] = useState<Record<string, Task[]>>({
     'not start': [
@@ -20,12 +25,6 @@ const Tasks: VFC = () => {
         implementation_hours: 1,
         implementation_minutes: 30,
         status: 'not start',
-        labels: [
-          {
-            id: 1,
-            name: 'private',
-          },
-        ],
         memo: 'memo',
         created_at: '2021-01-01 00:00:00',
         updated_at: '2021-01-01 00:00:00',
@@ -40,12 +39,6 @@ const Tasks: VFC = () => {
         implementation_hours: null,
         implementation_minutes: null,
         status: 'in progress',
-        labels: [
-          {
-            id: 1,
-            name: 'private',
-          },
-        ],
         memo: 'memo',
         created_at: '2021-01-01 00:00:00',
         updated_at: '2021-01-01 00:00:00',
@@ -89,7 +82,6 @@ const Tasks: VFC = () => {
         implementation_hours: null,
         implementation_minutes: null,
         status: showStatusTaskInput,
-        labels: [],
         memo: null,
         created_at: '2021-01-01 00:00:00',
         updated_at: '2021-01-01 00:00:00',
@@ -330,6 +322,6 @@ const Tasks: VFC = () => {
       </Container>
     </>
   )
-}
+})
 
 export default Tasks

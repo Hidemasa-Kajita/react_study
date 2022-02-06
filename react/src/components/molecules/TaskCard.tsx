@@ -1,6 +1,6 @@
 import { memo, VFC } from 'react'
 import Typography from '@mui/material/Typography'
-import { Task } from 'types/task'
+import { Task } from '../../types/task'
 
 type Props = {
   task: Task

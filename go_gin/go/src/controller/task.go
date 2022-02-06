@@ -16,17 +16,20 @@ type Task interface {
 	Store(c *gin.Context)
 	Update(c *gin.Context)
 	Delete(c *gin.Context)
+	ByStatus(c *gin.Context)
 }
 
 type task struct {
-	taskService  service.Task
-	taskResponse response.Task
+	taskService   service.Task
+	statusService service.Status
+	taskResponse  response.Task
 }
 
 func NewTask() Task {
 	return &task{
-		taskService:  service.NewTask(),
-		taskResponse: response.NewTask(),
+		taskService:   service.NewTask(),
+		statusService: service.NewStatus(),
+		taskResponse:  response.NewTask(),
 	}
 }
 
@@ -101,4 +104,12 @@ func (tc *task) Delete(c *gin.Context) {
 	tc.taskService.DeleteTask(id)
 
 	c.JSON(http.StatusNoContent, nil)
+}
+
+func (tc *task) ByStatus(c *gin.Context) {
+	s := tc.taskService.GetTasksByStatus()
+
+	r := tc.taskResponse.FormatByStatus(s)
+
+	c.JSON(http.StatusOK, r)
 }
